@@ -7,7 +7,7 @@ Material‑You expressive dark UI matching the `*.jsx` / `tokens.css` design fil
 
 ```
 Pinpoint.sln                       Visual Studio solution (Windows‑friendly)
-src/Pinpoint/                      Single MAUI project, multi‑targets net8.0-android & net8.0-ios
+src/Pinpoint/                      Single MAUI project, multi‑targets net10.0-android & net10.0-ios
   MauiProgram.cs                   DI registration
   App.xaml(.cs)                    App root, dark theme forced
   Views/                           ShellPage (tab bar), Map, Devices, People, Alerts
@@ -28,18 +28,18 @@ src/Pinpoint/                      Single MAUI project, multi‑targets net8.0-a
 1. Install Visual Studio 2022 17.8+ with the **.NET Multi‑platform App UI development** workload
    (includes Android SDK + iOS remote build tooling).
 2. Open `Pinpoint.sln`.
-3. To deploy to **Android**: pick the `net8.0-android` target framework, plug in a phone with
+3. To deploy to **Android**: pick the `net10.0-android` target framework, plug in a phone with
    USB debugging or start an emulator, press F5.
 4. To deploy to **iPhone** from Windows: pair Visual Studio with a Mac via **Pair to Mac**
-   (Tools → iOS → Pair to Mac). Then pick the `net8.0-ios` target framework. Signing/provisioning
+   (Tools → iOS → Pair to Mac). Then pick the `net10.0-ios` target framework. Signing/provisioning
    must be set up under the project's iOS bundle properties on the Mac.
 
 Command‑line builds:
 
 ```pwsh
 dotnet workload install maui
-dotnet build  Pinpoint.sln -f net8.0-android -c Release
-dotnet build  Pinpoint.sln -f net8.0-ios     -c Release   # requires paired Mac
+dotnet build  Pinpoint.sln -f net10.0-android -c Release
+dotnet build  Pinpoint.sln -f net10.0-ios     -c Release   # requires paired Mac
 ```
 
 ## Background location
