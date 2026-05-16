@@ -1,0 +1,43 @@
+<Project>
+
+  <!-- Auto-detect Android SDK so devs don't have to hand-set AndroidSdkDirectory.
+       Order: explicit MSBuild property > ANDROID_HOME > ANDROID_SDK_ROOT >
+              common Windows / macOS / Linux install locations.
+       The first existing directory wins. -->
+  <PropertyGroup Condition="'$(AndroidSdkDirectory)' == ''">
+    <_AndroidSdkCandidate Condition="'$(_AndroidSdkCandidate)' == '' AND '$(ANDROID_HOME)' != '' AND Exists('$(ANDROID_HOME)')">$(ANDROID_HOME)</_AndroidSdkCandidate>
+    <_AndroidSdkCandidate Condition="'$(_AndroidSdkCandidate)' == '' AND '$(ANDROID_SDK_ROOT)' != '' AND Exists('$(ANDROID_SDK_ROOT)')">$(ANDROID_SDK_ROOT)</_AndroidSdkCandidate>
+
+    <!-- Windows -->
+    <_AndroidSdkCandidate Condition="'$(_AndroidSdkCandidate)' == '' AND Exists('$(LOCALAPPDATA)\Android\Sdk')">$(LOCALAPPDATA)\Android\Sdk</_AndroidSdkCandidate>
+    <_AndroidSdkCandidate Condition="'$(_AndroidSdkCandidate)' == '' AND Exists('$(USERPROFILE)\AppData\Local\Android\Sdk')">$(USERPROFILE)\AppData\Local\Android\Sdk</_AndroidSdkCandidate>
+    <_AndroidSdkCandidate Condition="'$(_AndroidSdkCandidate)' == '' AND Exists('$(ProgramFiles)\Android\android-sdk')">$(ProgramFiles)\Android\android-sdk</_AndroidSdkCandidate>
+    <_AndroidSdkCandidate Condition="'$(_AndroidSdkCandidate)' == '' AND Exists('C:\Program Files (x86)\Android\android-sdk')">C:\Program Files (x86)\Android\android-sdk</_AndroidSdkCandidate>
+    <_AndroidSdkCandidate Condition="'$(_AndroidSdkCandidate)' == '' AND Exists('$(USERPROFILE)\android-sdk')">$(USERPROFILE)\android-sdk</_AndroidSdkCandidate>
+
+    <!-- macOS -->
+    <_AndroidSdkCandidate Condition="'$(_AndroidSdkCandidate)' == '' AND Exists('$(HOME)/Library/Android/sdk')">$(HOME)/Library/Android/sdk</_AndroidSdkCandidate>
+
+    <!-- Linux -->
+    <_AndroidSdkCandidate Condition="'$(_AndroidSdkCandidate)' == '' AND Exists('$(HOME)/Android/Sdk')">$(HOME)/Android/Sdk</_AndroidSdkCandidate>
+    <_AndroidSdkCandidate Condition="'$(_AndroidSdkCandidate)' == '' AND Exists('/usr/lib/android-sdk')">/usr/lib/android-sdk</_AndroidSdkCandidate>
+
+    <AndroidSdkDirectory Condition="'$(_AndroidSdkCandidate)' != ''">$(_AndroidSdkCandidate)</AndroidSdkDirectory>
+  </PropertyGroup>
+
+  <!-- Auto-detect the JDK that ships with Android Studio if JavaSdkDirectory isn't set -->
+  <PropertyGroup Condition="'$(JavaSdkDirectory)' == ''">
+    <_JdkCandidate Condition="'$(_JdkCandidate)' == '' AND '$(JAVA_HOME)' != '' AND Exists('$(JAVA_HOME)')">$(JAVA_HOME)</_JdkCandidate>
+    <_JdkCandidate Condition="'$(_JdkCandidate)' == '' AND Exists('$(ProgramFiles)\Microsoft\jdk-17.0.10.7-hotspot')">$(ProgramFiles)\Microsoft\jdk-17.0.10.7-hotspot</_JdkCandidate>
+    <_JdkCandidate Condition="'$(_JdkCandidate)' == '' AND Exists('$(ProgramFiles)\Android\Android Studio\jbr')">$(ProgramFiles)\Android\Android Studio\jbr</_JdkCandidate>
+    <_JdkCandidate Condition="'$(_JdkCandidate)' == '' AND Exists('$(ProgramFiles)\Eclipse Adoptium\jdk-17.0.10.7-hotspot')">$(ProgramFiles)\Eclipse Adoptium\jdk-17.0.10.7-hotspot</_JdkCandidate>
+    <JavaSdkDirectory Condition="'$(_JdkCandidate)' != ''">$(_JdkCandidate)</JavaSdkDirectory>
+  </PropertyGroup>
+
+  <Target Name="_ReportAndroidSdk" BeforeTargets="_ValidateAndroidSdkLocation"
+          Condition="'$(AndroidSdkDirectory)' != ''">
+    <Message Importance="high" Text="AndroidSdkDirectory auto-detected: $(AndroidSdkDirectory)" />
+    <Message Importance="high" Text="JavaSdkDirectory:                 $(JavaSdkDirectory)" Condition="'$(JavaSdkDirectory)' != ''" />
+  </Target>
+
+</Project>
