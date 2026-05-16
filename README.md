@@ -58,8 +58,8 @@ What the script does on a fresh Debian/Ubuntu box:
 1. `apt-get install` OpenJDK 17, curl, unzip.
 2. Installs the **.NET 10 SDK** into `~/.dotnet` if it isn't already on PATH.
 3. Downloads Android **command‑line tools** into `~/Android/Sdk`, accepts the
-   licences, and installs `platform-tools`, `platforms;android-35`,
-   `build-tools;35.0.0` (override via `ANDROID_API` / `ANDROID_BUILD_TOOLS`).
+   licences, and installs `platform-tools`, `platforms;android-36`,
+   `build-tools;36.0.0` (override via `ANDROID_API` / `ANDROID_BUILD_TOOLS`).
 4. Runs `dotnet workload install maui-android android`.
 5. Builds with `dotnet publish src/Pinpoint/Pinpoint.csproj -f net10.0-android`
    and prints the path to the resulting `.apk`.

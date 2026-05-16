@@ -16,8 +16,8 @@ case "$CONFIG" in Debug|Release) ;; release) CONFIG=Release ;; debug) CONFIG=Deb
     *) echo "Unknown config '$CONFIG' (Debug|Release)"; exit 1 ;; esac
 
 DOTNET_VERSION="${DOTNET_VERSION:-10.0}"
-ANDROID_API="${ANDROID_API:-35}"
-ANDROID_BUILD_TOOLS="${ANDROID_BUILD_TOOLS:-35.0.0}"
+ANDROID_API="${ANDROID_API:-36}"
+ANDROID_BUILD_TOOLS="${ANDROID_BUILD_TOOLS:-36.0.0}"
 ANDROID_CMDLINE_VER="${ANDROID_CMDLINE_VER:-11076708}"     # cmdline-tools rev 11.0
 
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
