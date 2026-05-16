@@ -2,10 +2,18 @@ namespace Pinpoint;
 
 public partial class App : Application
 {
-    public App(Views.ShellPage shell)
+    readonly IServiceProvider _services;
+
+    public App(IServiceProvider services)
     {
         InitializeComponent();
+        _services = services;
         UserAppTheme = AppTheme.Dark;
-        MainPage = shell;
+    }
+
+    protected override Window CreateWindow(IActivationState? activationState)
+    {
+        var shell = _services.GetRequiredService<Views.ShellPage>();
+        return new Window(shell);
     }
 }
