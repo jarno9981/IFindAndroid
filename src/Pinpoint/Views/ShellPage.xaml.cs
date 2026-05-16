@@ -5,33 +5,32 @@ namespace Pinpoint.Views;
 public partial class ShellPage : Shell
 {
     readonly AuthSession _session;
+    bool _initialised;
 
     public ShellPage(AuthSession session)
     {
         InitializeComponent();
         _session = session;
-        _session.Changed += (_, _) => MainThread.BeginInvokeOnMainThread(ApplyRoute);
+        _session.Changed += OnSessionChanged;
     }
 
-    protected override async void OnNavigated(ShellNavigatedEventArgs args)
+    protected override async void OnHandlerChanged()
     {
-        base.OnNavigated(args);
-        await EnsureLoadedAsync();
+        base.OnHandlerChanged();
+        if (Handler is null || _initialised) return;
+        _initialised = true;
+        try { await _session.LoadAsync(); } catch { /* SecureStorage may be unavailable in some hosts */ }
+        await ApplyRouteAsync();
     }
 
-    bool _loaded;
-    async Task EnsureLoadedAsync()
-    {
-        if (_loaded) return;
-        _loaded = true;
-        await _session.LoadAsync();
-        ApplyRoute();
-    }
+    void OnSessionChanged(object? sender, EventArgs e)
+        => Dispatcher.Dispatch(async () => await ApplyRouteAsync());
 
-    void ApplyRoute()
+    async Task ApplyRouteAsync()
     {
         var target = _session.IsSignedIn ? "//main" : "//auth/signin";
-        if (Current?.CurrentState?.Location?.OriginalString != target)
-            Dispatcher.Dispatch(async () => { try { await GoToAsync(target); } catch { } });
+        var current = CurrentState?.Location?.OriginalString;
+        if (current == target) return;
+        try { await GoToAsync(target); } catch { /* shell not ready yet */ }
     }
 }
