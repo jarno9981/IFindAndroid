@@ -64,7 +64,7 @@ public class LocationForegroundService : Service, ILocationListener
         var b = new NotificationCompat.Builder(this, ChannelId)
             .SetContentTitle("Pinpoint")
             .SetContentText("Sharing your live location")
-            .SetSmallIcon(Android.Resource.Drawable.IcMenuMylocation)
+            .SetSmallIcon(Resource.Mipmap.Appicon)
             .SetOngoing(true);
         return b.Build();
     }
