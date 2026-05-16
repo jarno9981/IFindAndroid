@@ -71,11 +71,21 @@ export ANDROID_SDK_ROOT="$ANDROID_HOME"
 CMDLINE_DIR="$ANDROID_HOME/cmdline-tools/latest"
 SDKMANAGER="$CMDLINE_DIR/bin/sdkmanager"
 
+# sdkmanager needs JAVA_HOME *before* we call it.
+export JAVA_HOME="${JAVA_HOME:-/usr/lib/jvm/java-17-openjdk-amd64}"
+if [ ! -d "$JAVA_HOME" ]; then
+    if command -v javac >/dev/null; then
+        JAVA_HOME="$(dirname "$(dirname "$(readlink -f "$(command -v javac)")")")"
+    fi
+fi
+export PATH="$JAVA_HOME/bin:$PATH"
+log "JAVA_HOME = $JAVA_HOME"
+
 if [ ! -x "$SDKMANAGER" ]; then
     log "Installing Android command-line tools to $ANDROID_HOME…"
     mkdir -p "$ANDROID_HOME/cmdline-tools"
     TMPZ="$(mktemp)"
-    curl -fsSL "https://dl.google.com/android/repository/commandlinetools-linux-${ANDROID_CMDLINE_VER}_latest.zip" -o "$TMPZ"
+    curl -fSL "https://dl.google.com/android/repository/commandlinetools-linux-${ANDROID_CMDLINE_VER}_latest.zip" -o "$TMPZ"
     rm -rf "$ANDROID_HOME/cmdline-tools/_tmp"
     unzip -q "$TMPZ" -d "$ANDROID_HOME/cmdline-tools/_tmp"
     rm -rf "$CMDLINE_DIR"
@@ -84,16 +94,24 @@ if [ ! -x "$SDKMANAGER" ]; then
     rm -f "$TMPZ"
 fi
 
-log "Accepting Android SDK licences and installing platforms / build-tools…"
-yes | "$SDKMANAGER" --sdk_root="$ANDROID_HOME" --licenses >/dev/null
-"$SDKMANAGER" --sdk_root="$ANDROID_HOME" --install \
-    "platform-tools" \
-    "platforms;android-${ANDROID_API}" \
-    "build-tools;${ANDROID_BUILD_TOOLS}" >/dev/null
+# Skip the package install entirely if everything we need is already there.
+if [ -d "$ANDROID_HOME/platforms/android-${ANDROID_API}" ] \
+   && [ -d "$ANDROID_HOME/build-tools/${ANDROID_BUILD_TOOLS}" ] \
+   && [ -d "$ANDROID_HOME/platform-tools" ]; then
+    log "Android SDK already has platforms;android-${ANDROID_API} + build-tools;${ANDROID_BUILD_TOOLS} — skipping sdkmanager."
+else
+    log "Accepting Android SDK licences (yes | sdkmanager --licenses)…"
+    yes 2>/dev/null | "$SDKMANAGER" --sdk_root="$ANDROID_HOME" --licenses \
+        | grep -E "^(Accepting|All|License)" || true
 
-export JAVA_HOME="${JAVA_HOME:-/usr/lib/jvm/java-17-openjdk-amd64}"
-[ -d "$JAVA_HOME" ] || JAVA_HOME="$(dirname "$(dirname "$(readlink -f "$(command -v javac)")")")"
-export PATH="$JAVA_HOME/bin:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH"
+    log "Installing platforms;android-${ANDROID_API}, build-tools;${ANDROID_BUILD_TOOLS}, platform-tools (this downloads ~150 MB, please be patient)…"
+    yes 2>/dev/null | "$SDKMANAGER" --sdk_root="$ANDROID_HOME" --install \
+        "platform-tools" \
+        "platforms;android-${ANDROID_API}" \
+        "build-tools;${ANDROID_BUILD_TOOLS}"
+fi
+
+export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH"
 
 # ---------- 4. MAUI / Android workloads --------------------------------------
 log "Ensuring MAUI + Android workloads are installed…"
