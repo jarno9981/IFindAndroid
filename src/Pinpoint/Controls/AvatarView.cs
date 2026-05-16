@@ -1,3 +1,5 @@
+using Microsoft.Maui.Controls.Shapes;
+
 namespace Pinpoint.Controls;
 
 public class AvatarView : Border
