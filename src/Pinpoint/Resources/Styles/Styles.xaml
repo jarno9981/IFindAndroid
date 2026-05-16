@@ -7,6 +7,9 @@
     <conv:BoolToShareTextConverter x:Key="BoolToShareText" />
     <conv:BoolToShareColorConverter x:Key="BoolToShareColor" />
     <conv:BatteryToColorConverter x:Key="BatteryToColor" />
+    <conv:InverseBoolConverter x:Key="InverseBool" />
+    <conv:NotEmptyConverter x:Key="NotEmpty" />
+    <conv:UnreadDotOpacityConverter x:Key="UnreadDotOpacity" />
 
     <Style TargetType="Page" ApplyToDerivedTypes="True">
         <Setter Property="Padding" Value="0" />

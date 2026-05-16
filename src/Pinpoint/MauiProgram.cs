@@ -16,6 +16,8 @@ public static class MauiProgram
             .UseMauiCommunityToolkit()
             .ConfigureFonts(fonts => { });
 
+        builder.Services.AddSingleton<AuthSession>();
+        builder.Services.AddSingleton<IApiClient, ApiClient>();
         builder.Services.AddSingleton<ILocationService, LocationService>();
         builder.Services.AddSingleton<ISharingService, SharingService>();
         builder.Services.AddSingleton<IBackgroundLocationService, BackgroundLocationService>();
@@ -24,12 +26,15 @@ public static class MauiProgram
         builder.Services.AddSingleton<PeopleViewModel>();
         builder.Services.AddSingleton<DevicesViewModel>();
         builder.Services.AddSingleton<AlertsViewModel>();
+        builder.Services.AddTransient<AuthViewModel>();
 
         builder.Services.AddSingleton<ShellPage>();
         builder.Services.AddTransient<MapPage>();
         builder.Services.AddTransient<DevicesPage>();
         builder.Services.AddTransient<PeoplePage>();
         builder.Services.AddTransient<AlertsPage>();
+        builder.Services.AddTransient<Views.Auth.SignInPage>();
+        builder.Services.AddTransient<Views.Auth.SignUpPage>();
 
 #if DEBUG
         builder.Logging.AddDebug();

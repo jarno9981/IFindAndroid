@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Pinpoint.ViewModels"
+             x:Class="Pinpoint.Views.Auth.SignInPage"
+             x:DataType="vm:AuthViewModel"
+             BackgroundColor="{StaticResource Surface1}"
+             Shell.NavBarIsVisible="False">
+
+    <Grid Padding="24,64,24,24" RowDefinitions="Auto,Auto,Auto,*,Auto" RowSpacing="16">
+        <VerticalStackLayout Grid.Row="0" Spacing="6">
+            <Label Text="Pinpoint" Style="{StaticResource HeadlineLabel}" FontSize="34" />
+            <Label Text="Find your people and your stuff." Style="{StaticResource MutedLabel}" FontSize="14"/>
+        </VerticalStackLayout>
+
+        <Border Grid.Row="1" Style="{StaticResource Card}">
+            <VerticalStackLayout Spacing="14">
+                <Label Text="Sign in" Style="{StaticResource TitleLabel}" />
+                <Border Style="{StaticResource Pill}" Padding="14,10">
+                    <Entry Placeholder="Email" Text="{Binding Email}" Keyboard="Email"/>
+                </Border>
+                <Border Style="{StaticResource Pill}" Padding="14,10">
+                    <Entry Placeholder="Password" Text="{Binding Password}" IsPassword="True"/>
+                </Border>
+                <Label Text="{Binding ErrorText}" TextColor="#FF8A87" FontSize="12"
+                       IsVisible="{Binding ErrorText, Converter={StaticResource NotEmpty}}"/>
+                <Button Text="Sign in" Command="{Binding SignInCommand}"
+                        IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBool}}"/>
+            </VerticalStackLayout>
+        </Border>
+
+        <BoxView Grid.Row="2" HeightRequest="1" Color="{StaticResource Outline}" Margin="0,8,0,0"/>
+
+        <VerticalStackLayout Grid.Row="4" Spacing="10">
+            <Label Text="New here?" Style="{StaticResource MutedLabel}" HorizontalTextAlignment="Center"/>
+            <Button Text="Create an account" Style="{StaticResource GhostButton}" Command="{Binding GoToSignUpCommand}"/>
+            <Label Text="Server: location.beertengangs.com" Style="{StaticResource MutedLabel}" FontSize="10" HorizontalTextAlignment="Center" Margin="0,8,0,0"/>
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

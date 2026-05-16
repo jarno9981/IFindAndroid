@@ -16,6 +16,28 @@ public class BoolToShareColorConverter : IValueConverter
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotImplementedException();
 }
 
+public class InverseBoolConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => !(value is bool b && b);
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => !(value is bool b && b);
+}
+
+public class NotEmptyConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => !string.IsNullOrWhiteSpace(value as string);
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotImplementedException();
+}
+
+public class UnreadDotOpacityConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => (value is bool b && b) ? 0.0 : 1.0;
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotImplementedException();
+}
+
 public class BatteryToColorConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
