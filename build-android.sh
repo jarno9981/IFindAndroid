@@ -122,8 +122,12 @@ log "Ensuring MAUI + Android workloads are installed…"
 
 # ---------- 5. build ---------------------------------------------------------
 log "Restoring & building Pinpoint Android ($CONFIG)…"
-"$DOTNET_BIN" restore "$PROJ"
-"$DOTNET_BIN" publish "$PROJ" -f net10.0-android -c "$CONFIG" \
+# Restrict every step to the Android TFM so an iOS/MacCatalyst entry in the
+# csproj can't pull in workloads that don't exist on Linux.
+TFM=net10.0-android
+"$DOTNET_BIN" restore "$PROJ" /p:TargetFramework=$TFM /p:TargetFrameworks=$TFM
+"$DOTNET_BIN" publish "$PROJ" -f $TFM -c "$CONFIG" \
+    /p:TargetFrameworks=$TFM \
     /p:AndroidSdkDirectory="$ANDROID_HOME" \
     /p:JavaSdkDirectory="$JAVA_HOME"
 
