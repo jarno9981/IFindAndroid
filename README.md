@@ -56,6 +56,27 @@ dotnet build  Pinpoint.sln -f net8.0-ios     -c Release   # requires paired Mac
 Both implementations push updates into `ISharingService.PushLocation`, which the Map/People
 view models observe.
 
+## Relay server (`server/`)
+
+`server/` contains the Linux backend that runs at **`location.beertengangs.com`**.
+Node.js 18+, SQLite (better-sqlite3), JWT auth, multipart image uploads, and an
+NDJSON audit log of every accepted location ping.
+
+```bash
+# Local dev (foreground):
+cd server && MODE=dev ./deploy.sh
+
+# Production on Debian/Ubuntu (root):
+sudo ./deploy.sh                       # nginx + systemd + Let's Encrypt
+sudo DOMAIN=loc.example.com ./deploy.sh
+sudo ./deploy.sh --no-tls              # skip certbot
+```
+
+See `server/README.md` for the full API surface and operational notes. The MAUI
+app talks to `https://location.beertengangs.com` by default
+(`ApiClient.DefaultBaseUrl`). First launch shows **Sign in / Create account**
+before opening the map.
+
 ## Design parity
 
 `Resources/Styles/Colors.xaml` mirrors every token in the repo's `tokens.css`

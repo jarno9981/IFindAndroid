@@ -26,7 +26,7 @@
                             </VerticalStackLayout>
                             <Ellipse Grid.Column="2" WidthRequest="10" HeightRequest="10"
                                      Fill="{StaticResource Primary}"
-                                     Opacity="{Binding Read, Converter={StaticResource BoolToShareColor}, FallbackValue=1}"
+                                     Opacity="{Binding Read, Converter={StaticResource UnreadDotOpacity}, FallbackValue=1}"
                                      VerticalOptions="Center"/>
                         </Grid>
                     </Border>

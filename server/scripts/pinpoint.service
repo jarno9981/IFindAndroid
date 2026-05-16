@@ -1,0 +1,22 @@
+[Unit]
+Description=Pinpoint relay server
+After=network.target
+
+[Service]
+Type=simple
+User=pinpoint
+Group=pinpoint
+WorkingDirectory=/opt/pinpoint
+EnvironmentFile=/opt/pinpoint/.env
+ExecStart=/usr/bin/env node /opt/pinpoint/src/server.js
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=yes
+ReadWritePaths=/var/lib/pinpoint /opt/pinpoint
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target

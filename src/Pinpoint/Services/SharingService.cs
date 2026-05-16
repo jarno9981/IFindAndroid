@@ -4,6 +4,7 @@ namespace Pinpoint.Services;
 
 public class SharingService : ISharingService
 {
+    private readonly IApiClient _api;
     private readonly List<Person> _people = new();
     private readonly List<TrackedDevice> _devices = new();
     private readonly List<AlertItem> _alerts = new();
@@ -15,8 +16,9 @@ public class SharingService : ISharingService
 
     public event EventHandler? Changed;
 
-    public SharingService()
+    public SharingService(IApiClient api)
     {
+        _api = api;
         _people.AddRange(new[]
         {
             new Person { Name = "You",   Initials = "YO", Accent = "#7CC4FF", Latitude = 37.7749, Longitude = -122.4194, Status = "Sharing live" },
@@ -57,11 +59,19 @@ public class SharingService : ISharingService
     public void PushLocation(LocationUpdate update)
     {
         var you = _people.FirstOrDefault(p => p.Name == "You");
-        if (you is null) return;
-        you.Latitude = update.Latitude;
-        you.Longitude = update.Longitude;
-        you.LastSeen = update.Timestamp;
-        Changed?.Invoke(this, EventArgs.Empty);
+        if (you is not null)
+        {
+            you.Latitude = update.Latitude;
+            you.Longitude = update.Longitude;
+            you.LastSeen = update.Timestamp;
+            Changed?.Invoke(this, EventArgs.Empty);
+        }
+
+        _ = Task.Run(async () =>
+        {
+            try { await _api.PushLocationAsync(update.Latitude, update.Longitude, update.Accuracy, update.Timestamp); }
+            catch { /* offline / unauthenticated — fine, next ping will retry */ }
+        });
     }
 
     public void MarkAlertRead(string id)
