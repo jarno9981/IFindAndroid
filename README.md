@@ -42,6 +42,33 @@ dotnet build  Pinpoint.sln -f net10.0-android -c Release
 dotnet build  Pinpoint.sln -f net10.0-ios     -c Release   # requires paired Mac
 ```
 
+## Build on a Linux VPS
+
+Apple's toolchain only runs on macOS, so **iOS can't be compiled on Linux** —
+but Android can. A self‑contained installer + builder is provided:
+
+```bash
+git clone <this repo> && cd IFindAndroid
+./build-android.sh           # Debug APK
+./build-android.sh release   # Release APK (unsigned)
+```
+
+What the script does on a fresh Debian/Ubuntu box:
+
+1. `apt-get install` OpenJDK 17, curl, unzip.
+2. Installs the **.NET 10 SDK** into `~/.dotnet` if it isn't already on PATH.
+3. Downloads Android **command‑line tools** into `~/Android/Sdk`, accepts the
+   licences, and installs `platform-tools`, `platforms;android-35`,
+   `build-tools;35.0.0` (override via `ANDROID_API` / `ANDROID_BUILD_TOOLS`).
+4. Runs `dotnet workload install maui-android android`.
+5. Builds with `dotnet publish src/Pinpoint/Pinpoint.csproj -f net10.0-android`
+   and prints the path to the resulting `.apk`.
+
+Re‑running is idempotent — already‑installed components are skipped. To sign
+a release build, set `AndroidSigningKeyStore` / `AndroidSigningKeyAlias` /
+`AndroidSigningKeyPass` / `AndroidSigningStorePass` and re‑run with
+`release`.
+
 ## Background location
 
 * **Android** — A foreground service (`Platforms/Android/LocationForegroundService.cs`) is started
