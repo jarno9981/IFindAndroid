@@ -4,9 +4,10 @@ using Android.Content.PM;
 using Android.Locations;
 using Android.OS;
 using AndroidX.Core.App;
-using Pinpoint.Models;
 using Pinpoint.Services;
 using AndroidApp = Android.App.Application;
+using AndroidLocation = Android.Locations.Location;
+using LocationUpdate = Pinpoint.Models.LocationUpdate;
 
 namespace Pinpoint.Platforms.Droid;
 
@@ -68,10 +69,10 @@ public class LocationForegroundService : Service, ILocationListener
         return b.Build();
     }
 
-    public void OnLocationChanged(Location location)
+    public void OnLocationChanged(AndroidLocation location)
     {
         var u = new LocationUpdate(location.Latitude, location.Longitude,
-            location.HasAccuracy ? location.Accuracy : null,
+            location.HasAccuracy ? location.Accuracy : (double?)null,
             DateTimeOffset.FromUnixTimeMilliseconds(location.Time).UtcDateTime);
 
         var sharing = IPlatformApplication.Current?.Services.GetService<ISharingService>();
