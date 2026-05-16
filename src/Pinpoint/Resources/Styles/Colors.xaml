@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xaml-comp compile="true" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- Surfaces (dark) — mapped from tokens.css -->
+    <Color x:Key="Surface0">#07090D</Color>
+    <Color x:Key="Surface1">#0F1218</Color>
+    <Color x:Key="Surface2">#161A22</Color>
+    <Color x:Key="Surface3">#1E232D</Color>
+    <Color x:Key="Surface4">#272D39</Color>
+    <Color x:Key="Surface5">#323948</Color>
+
+    <Color x:Key="OnSurface">#E8EBF2</Color>
+    <Color x:Key="OnSurfaceStrong">#FFFFFF</Color>
+    <Color x:Key="OnSurfaceVariant">#A6ADBB</Color>
+    <Color x:Key="OnSurfaceMuted">#6A7180</Color>
+    <Color x:Key="Outline">#2C3340</Color>
+    <Color x:Key="OutlineStrong">#3C4453</Color>
+
+    <Color x:Key="Primary">#7CC4FF</Color>
+    <Color x:Key="OnPrimary">#00324F</Color>
+    <Color x:Key="PrimaryContainer">#1A4870</Color>
+    <Color x:Key="OnPrimaryContainer">#D3E8FF</Color>
+
+    <Color x:Key="Secondary">#B8A4FF</Color>
+    <Color x:Key="OnSecondary">#2A1668</Color>
+    <Color x:Key="SecondaryContainer">#3A2F6B</Color>
+    <Color x:Key="OnSecondaryContainer">#E6DCFF</Color>
+
+    <Color x:Key="Tertiary">#FFB787</Color>
+    <Color x:Key="OnTertiary">#4A2300</Color>
+    <Color x:Key="TertiaryContainer">#5E3A1F</Color>
+    <Color x:Key="OnTertiaryContainer">#FFE0C8</Color>
+
+    <Color x:Key="ErrorColor">#FF8A87</Color>
+    <Color x:Key="SuccessColor">#87E0A9</Color>
+
+    <Color x:Key="MapBg">#0B0E14</Color>
+    <Color x:Key="MapLand">#131822</Color>
+    <Color x:Key="MapWater">#0A1622</Color>
+    <Color x:Key="MapRoad">#232A37</Color>
+    <Color x:Key="MapRoadMajor">#2F3848</Color>
+    <Color x:Key="MapPark">#14241C</Color>
+
+    <SolidColorBrush x:Key="Surface0Brush" Color="{StaticResource Surface0}" />
+    <SolidColorBrush x:Key="Surface1Brush" Color="{StaticResource Surface1}" />
+    <SolidColorBrush x:Key="Surface2Brush" Color="{StaticResource Surface2}" />
+    <SolidColorBrush x:Key="Surface3Brush" Color="{StaticResource Surface3}" />
+    <SolidColorBrush x:Key="Surface4Brush" Color="{StaticResource Surface4}" />
+    <SolidColorBrush x:Key="Surface5Brush" Color="{StaticResource Surface5}" />
+    <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}" />
+    <SolidColorBrush x:Key="OnSurfaceBrush" Color="{StaticResource OnSurface}" />
+    <SolidColorBrush x:Key="OnSurfaceVariantBrush" Color="{StaticResource OnSurfaceVariant}" />
+    <SolidColorBrush x:Key="OutlineBrush" Color="{StaticResource Outline}" />
+</ResourceDictionary>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Pinpoint.ViewModels"
+             xmlns:m="clr-namespace:Pinpoint.Models"
+             x:Class="Pinpoint.Views.AlertsPage"
+             x:DataType="vm:AlertsViewModel"
+             Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto,*" Padding="16">
+        <Label Text="Alerts" Style="{StaticResource HeadlineLabel}" Margin="0,12,0,16"/>
+        <CollectionView Grid.Row="1" ItemsSource="{Binding Alerts}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="m:AlertItem">
+                    <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="14">
+                            <Border WidthRequest="40" HeightRequest="40" BackgroundColor="{StaticResource PrimaryContainer}">
+                                <Border.StrokeShape><RoundRectangle CornerRadius="12"/></Border.StrokeShape>
+                                <Label Text="!" FontAttributes="Bold" FontSize="18"
+                                       TextColor="{StaticResource OnPrimaryContainer}"
+                                       HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                                <Label Text="{Binding Title}" Style="{StaticResource TitleLabel}"/>
+                                <Label Text="{Binding Subtitle}" Style="{StaticResource MutedLabel}"/>
+                            </VerticalStackLayout>
+                            <Ellipse Grid.Column="2" WidthRequest="10" HeightRequest="10"
+                                     Fill="{StaticResource Primary}"
+                                     Opacity="{Binding Read, Converter={StaticResource BoolToShareColor}, FallbackValue=1}"
+                                     VerticalOptions="Center"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

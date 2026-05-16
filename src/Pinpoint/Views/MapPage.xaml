@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Pinpoint.ViewModels"
+             xmlns:m="clr-namespace:Pinpoint.Models"
+             xmlns:c="clr-namespace:Pinpoint.Controls"
+             x:Class="Pinpoint.Views.MapPage"
+             x:DataType="vm:MapViewModel"
+             BackgroundColor="{StaticResource MapBg}"
+             Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- Top app bar -->
+        <Border Grid.Row="0" Margin="16,16,16,8" Style="{StaticResource Card}" BackgroundColor="{StaticResource Surface2}">
+            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                <c:AvatarView Initials="YO" Accent="#7CC4FF" Size="38" />
+                <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                    <Label Text="Pinpoint" Style="{StaticResource TitleLabel}" />
+                    <Label Text="{Binding StatusText}" Style="{StaticResource MutedLabel}" />
+                </VerticalStackLayout>
+                <Border Grid.Column="2" Style="{StaticResource Pill}">
+                    <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="8" VerticalOptions="Center">
+                        <Ellipse WidthRequest="8" HeightRequest="8"
+                                 Fill="{Binding IsSharing, Converter={StaticResource BoolToShareColor}}" />
+                        <Label Grid.Column="1" Text="{Binding IsSharing, Converter={StaticResource BoolToShareText}}"
+                               FontAttributes="Bold" FontSize="12"/>
+                    </Grid>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ToggleShareCommand}" />
+                    </Border.GestureRecognizers>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- Stylised map canvas -->
+        <Grid Grid.Row="1" Margin="16,8,16,8">
+            <Border BackgroundColor="{StaticResource MapLand}" StrokeThickness="1" Stroke="{StaticResource Outline}">
+                <Border.StrokeShape><RoundRectangle CornerRadius="28" /></Border.StrokeShape>
+                <Grid>
+                    <!-- Water / parks bands -->
+                    <BoxView Color="{StaticResource MapWater}" HeightRequest="80"
+                             VerticalOptions="Start" Margin="0,40,0,0" Opacity="0.95"/>
+                    <BoxView Color="{StaticResource MapPark}" HeightRequest="60"
+                             VerticalOptions="End" Margin="0,0,0,90" Opacity="0.85"/>
+                    <!-- Roads -->
+                    <BoxView Color="{StaticResource MapRoadMajor}" HeightRequest="3" VerticalOptions="Center"/>
+                    <BoxView Color="{StaticResource MapRoad}" HeightRequest="2" VerticalOptions="Center" TranslationY="-60"/>
+                    <BoxView Color="{StaticResource MapRoad}" HeightRequest="2" VerticalOptions="Center" TranslationY="80"/>
+                    <BoxView Color="{StaticResource MapRoadMajor}" WidthRequest="3" HorizontalOptions="Center"/>
+                    <BoxView Color="{StaticResource MapRoad}" WidthRequest="2" HorizontalOptions="Center" TranslationX="-80"/>
+                    <BoxView Color="{StaticResource MapRoad}" WidthRequest="2" HorizontalOptions="Center" TranslationX="90"/>
+
+                    <!-- People pins -->
+                    <CollectionView ItemsSource="{Binding People}"
+                                    SelectionMode="Single"
+                                    SelectionChangedCommand="{Binding SelectCommand}"
+                                    SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=SelectedItem}">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Horizontal" ItemSpacing="14"/>
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="m:Person">
+                                <VerticalStackLayout Spacing="4" HorizontalOptions="Center" Padding="6">
+                                    <c:AvatarView Initials="{Binding Initials}" Accent="{Binding Accent}" Size="44" />
+                                    <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="11"
+                                           HorizontalTextAlignment="Center" TextColor="{StaticResource OnSurface}"/>
+                                </VerticalStackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Grid>
+            </Border>
+
+            <!-- FAB recenter -->
+            <Border WidthRequest="56" HeightRequest="56"
+                    BackgroundColor="{StaticResource Primary}"
+                    HorizontalOptions="End" VerticalOptions="End"
+                    Margin="0,0,12,12">
+                <Border.StrokeShape><RoundRectangle CornerRadius="28"/></Border.StrokeShape>
+                <Label Text="◎" FontSize="26" TextColor="{StaticResource OnPrimary}"
+                       HorizontalOptions="Center" VerticalOptions="Center"/>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding RefreshCommand}" />
+                </Border.GestureRecognizers>
+            </Border>
+        </Grid>
+
+        <!-- Bottom info card -->
+        <Border Grid.Row="2" Margin="16,8,16,16" Style="{StaticResource Card}">
+            <VerticalStackLayout Spacing="10">
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label Text="Live location" Style="{StaticResource TitleLabel}" />
+                    <Label Grid.Column="1" Text="{Binding StatusText}" Style="{StaticResource MutedLabel}"/>
+                </Grid>
+                <Label Text="Pinpoint runs in the background so trusted people always see where you are — without draining your battery."
+                       Style="{StaticResource MutedLabel}" />
+                <HorizontalStackLayout Spacing="10">
+                    <Button Text="Share" Command="{Binding ToggleShareCommand}" />
+                    <Button Text="Refresh" Style="{StaticResource GhostButton}" Command="{Binding RefreshCommand}"/>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
+</ContentPage>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Pinpoint.ViewModels"
+             xmlns:m="clr-namespace:Pinpoint.Models"
+             xmlns:c="clr-namespace:Pinpoint.Controls"
+             x:Class="Pinpoint.Views.PeoplePage"
+             x:DataType="vm:PeopleViewModel"
+             Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto,*" Padding="16">
+        <Label Text="People" Style="{StaticResource HeadlineLabel}" Margin="0,12,0,16"/>
+        <CollectionView Grid.Row="1" ItemsSource="{Binding People}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="m:Person">
+                    <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="14">
+                            <c:AvatarView Initials="{Binding Initials}" Accent="{Binding Accent}" Size="48" />
+                            <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                                <Label Text="{Binding Name}" Style="{StaticResource TitleLabel}"/>
+                                <Label Text="{Binding Status}" Style="{StaticResource MutedLabel}"/>
+                            </VerticalStackLayout>
+                            <Border Grid.Column="2" Style="{StaticResource Pill}">
+                                <Label FontAttributes="Bold" FontSize="11"
+                                       TextColor="{Binding Sharing, Converter={StaticResource BoolToShareColor}}"
+                                       Text="{Binding Sharing, Converter={StaticResource BoolToShareText}}" />
+                            </Border>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>
