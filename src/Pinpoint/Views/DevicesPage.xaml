@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Pinpoint.ViewModels"
+             xmlns:m="clr-namespace:Pinpoint.Models"
+             x:Class="Pinpoint.Views.DevicesPage"
+             x:DataType="vm:DevicesViewModel"
+             Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto,Auto,*" Padding="16">
+        <Label Text="Devices" Style="{StaticResource HeadlineLabel}" Margin="0,12,0,0"/>
+        <Border Grid.Row="1" Style="{StaticResource Pill}" Margin="0,12,0,12" Padding="14,10">
+            <Entry Placeholder="Search devices" Text="{Binding SearchText}" />
+        </Border>
+        <CollectionView Grid.Row="2" ItemsSource="{Binding Devices}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="m:TrackedDevice">
+                    <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="14">
+                            <Border WidthRequest="44" HeightRequest="44" BackgroundColor="{StaticResource Surface3}"
+                                    Stroke="{StaticResource Outline}">
+                                <Border.StrokeShape><RoundRectangle CornerRadius="14"/></Border.StrokeShape>
+                                <Label Text="◉" FontSize="20" TextColor="{StaticResource Primary}"
+                                       HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                                <Label Text="{Binding Name}" Style="{StaticResource TitleLabel}" />
+                                <Label Style="{StaticResource MutedLabel}">
+                                    <Label.Text>
+                                        <MultiBinding StringFormat="{}{0} · {1}">
+                                            <Binding Path="Owner"/>
+                                            <Binding Path="Kind"/>
+                                        </MultiBinding>
+                                    </Label.Text>
+                                </Label>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Column="2" Spacing="4" HorizontalOptions="End">
+                                <Border Padding="8,3" BackgroundColor="{StaticResource Surface3}"
+                                        Stroke="{StaticResource Outline}">
+                                    <Border.StrokeShape><RoundRectangle CornerRadius="999"/></Border.StrokeShape>
+                                    <Label FontAttributes="Bold" FontSize="11"
+                                           TextColor="{Binding Battery, Converter={StaticResource BatteryToColor}}">
+                                        <Label.Text>
+                                            <Binding Path="Battery" StringFormat="{}{0}%"/>
+                                        </Label.Text>
+                                    </Label>
+                                </Border>
+                                <Label Text="{Binding Online, Converter={StaticResource BoolToShareText}}"
+                                       Style="{StaticResource MutedLabel}" HorizontalTextAlignment="End"/>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>
